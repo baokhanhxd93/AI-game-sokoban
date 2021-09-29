@@ -323,7 +323,9 @@ def transferToGameState(layout):
             elif layout[irow][icol] == '.':
                 layout[irow][icol] = 4  # dock
             elif layout[irow][icol] == '+':
-                layout[irow][icol] = 5  # box on dock
+                layout[irow][icol] = 5  # work on dock
+            elif layout[irow][icol] == '*':
+                layout[irow][icol] = 6  # box on dock
         colsNum = len(layout[irow])
         if colsNum < maxColsNum:
             layout[irow].extend([1 for _ in range(maxColsNum-colsNum)])
