@@ -20,7 +20,7 @@ class game:
             char == '.' or  # dock
             char == '*' or  # box on dock
             char == '$' or  # box
-                char == '+'):
+            char == '+'):   # worker on dock
             return True
         else:
             return False
@@ -42,8 +42,8 @@ class game:
                     elif c == '\n':  # jump to next row when newline
                         continue
                     else:
-                        print(("ERROR: Level ")+str(level) +
-                              (" has invalid value ")+c)
+                        print(("ERROR: Level ") + str(level) +
+                              (" has invalid value ") + c)
                         sys.exit(1)
                 self.matrix.append(row)
             else:
@@ -74,14 +74,15 @@ class game:
         if self.is_valid_value(content):
             self.matrix[y][x] = content
         else:
-            print(("ERROR: Value '")+content+("' to be added is not valid"))
+            print(("ERROR: Value '") + content +
+                  ("' to be added is not valid"))
 
     def worker(self):
         x = 0
         y = 0
         for row in self.matrix:
             for pos in row:
-                if pos == '@' or pos == '+' or pos == '<' or pos == '?':
+                if pos == '@' or pos == '+':
                     return (x, y, pos)
                 else:
                     x = x + 1
@@ -194,7 +195,7 @@ class game:
             elif current[2] == '+' and future == '$' and future_box == '.':
                 self.move_box(current[0]+x, current[1]+y, x, y)
                 self.set_content(current[0], current[1], '.')
-                self.set_content(current[0]+x, current[1]+y, '+')
+                self.set_content(current[0]+x, current[1]+y, '@')
                 if save:
                     self.queue.put((x, y, True))
             elif current[2] == '+' and future == '*' and future_box == ' ':
@@ -610,8 +611,10 @@ if __name__ == '__main__':
                             game.move(-1, 0, True)
                             a = a[1:]
 
-                    else:
-                        continue
+                        else:
+                            continue
+                        pygame.display.update()
+
                 elif event.key == pygame.K_q:
                     sys.exit(0)
                 elif event.key == pygame.K_d:
