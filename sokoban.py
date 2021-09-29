@@ -334,13 +334,14 @@ def transferToGameState(layout):
 
 def PosOfPlayer(gameState):
     # Return the position of agent
-    return tuple(np.argwhere(gameState == 2)[0])  # e.g. (2, 2)
+    # e.g. (2, 2)
+    return tuple(np.argwhere(gameState == 2 | (gameState == 5))[0])
 
 
 def PosOfBoxes(gameState):
     # Return the positions of boxes
     # e.g. ((2, 3), (3, 4), (4, 4), (6, 1), (6, 4), (6, 5))
-    return tuple(tuple(x) for x in np.argwhere((gameState == 3) | (gameState == 5)))
+    return tuple(tuple(x) for x in np.argwhere((gameState == 3) | (gameState == 6)))
 
 
 def PosOfWalls(gameState):
@@ -352,7 +353,7 @@ def PosOfWalls(gameState):
 def PosOfGoals(gameState):
     # Return the positions of goals
     # e.g. like those above
-    return tuple(tuple(x) for x in np.argwhere((gameState == 4) | (gameState == 5)))
+    return tuple(tuple(x) for x in np.argwhere((gameState == 4) | (gameState == 6)))
 
 
 def isEndState(posBox):
