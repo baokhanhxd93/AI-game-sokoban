@@ -597,22 +597,35 @@ if __name__ == '__main__':
                 sys.exit(0)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
+
                     for i in range(len(a)):
                         if a[0] == 'u' or a[0] == 'U':
                             game.move(0, -1, True)
                             a = a[1:]
+                            pygame.display.update()
+                            print_game(game.get_matrix(), screen)
+                            pygame.time.delay(500)
 
                         elif a[0] == 'd' or a[0] == 'D':
                             game.move(0, 1, True)
                             a = a[1:]
+                            pygame.display.update()
+                            print_game(game.get_matrix(), screen)
+                            pygame.time.delay(500)
 
                         elif a[0] == 'r' or a[0] == 'R':
                             game.move(1, 0, True)
                             a = a[1:]
+                            pygame.display.update()
+                            print_game(game.get_matrix(), screen)
+                            pygame.time.delay(500)
 
                         elif a[0] == 'l' or a[0] == 'L':
                             game.move(-1, 0, True)
                             a = a[1:]
+                            pygame.display.update()
+                            print_game(game.get_matrix(), screen)
+                            pygame.time.delay(500)
 
                         else:
                             continue
