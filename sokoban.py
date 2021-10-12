@@ -20,7 +20,7 @@ class game:
             char == '.' or  # dock
             char == '*' or  # box on dock
             char == '$' or  # box
-            char == '+'):   # worker on dock
+                char == '+'):   # worker on dock
             return True
         else:
             return False
@@ -335,7 +335,7 @@ def transferToGameState(layout):
 def PosOfPlayer(gameState):
     # Return the position of agent
     # e.g. (2, 2)
-    return tuple(np.argwhere(gameState == 2 | (gameState == 5))[0])
+    return tuple(np.argwhere((gameState == 2) | (gameState == 5))[0])
 
 
 def PosOfBoxes(gameState):
@@ -469,7 +469,7 @@ def breadthFirstSearch():
                 actions.append(node_action + [action[-1]])
     end = time.time()
     print('RUNTIME OF BREATHFIRST SEARCH: %.3f second.' % (end - start),
-          'EXPLORED NODE                : %d' % (len(exploredSet)),
+          'EXPLORED NODE                : %d' % (len(exploredSet)), 
           'NUMBER OF STEP               : %d' % (len(res[0])), sep='\n')
     return res
 
