@@ -26,6 +26,7 @@ class game:
             return False
 
     def __init__(self, level):
+        # queue contain (x, y , save); (x,y) vector movement, if worker push box then save is true else save is false
         self.queue = queue.LifoQueue()
         self.matrix = []
 
@@ -67,7 +68,7 @@ class game:
                 sys.stdout.flush()
             sys.stdout.write('\n')
 
-    def get_content(self, x, y):
+    def get_content(self, x, y):  # return value of position(x,y) of boardgame
         return self.matrix[y][x]
 
     def set_content(self, x, y, content):
@@ -77,27 +78,32 @@ class game:
             print(("ERROR: Value '") + content +
                   ("' to be added is not valid"))
 
-    def worker(self):
+    def worker(self):  # return worker position
         x = 0
         y = 0
         for row in self.matrix:
             for pos in row:
                 if pos == '@' or pos == '+':
+                    # worker is on position(x, y) of boardgame
                     return (x, y, pos)
                 else:
                     x = x + 1
             y = y + 1
             x = 0
 
+    # check if worker can move to next postion by adding vector(x,y) into current position (x,y in [1, -1, 0])
     def can_move(self, x, y):
         return self.get_content(self.worker()[0]+x, self.worker()[1]+y) not in ['#', '*', '$']
 
+    # return content of posision = vector(x,y) + current position of worker (x,y in [1, -1, 0])
     def next(self, x, y):
         return self.get_content(self.worker()[0]+x, self.worker()[1]+y)
 
+    # check if worker can push the box to position = current position of box + vector (x,y) (x,y in [1, -1, 0])
     def can_push(self, x, y):
         return (self.next(x, y) in ['*', '$'] and self.next(x+x, y+y) in [' ', '.'])
 
+    # check if the game has been completed. Problem is solved when there is no longer a dock without box
     def is_completed(self):
         for row in self.matrix:
             for cell in row:
@@ -105,9 +111,9 @@ class game:
                     return False
         return True
 
-    def move_box(self, x, y, a, b):
-        #        (x,y) -> move to do
-        #        (a,b) -> box to move
+    def move_box(self, x, y, a, b):  # move box from current to new position
+        #        (x,y) -> current position of box
+        #        (a,b) -> vector to move box (a,b in [1, -1, 0])
         current_box = self.get_content(x, y)
         future_box = self.get_content(x+a, y+b)
         if current_box == '$' and future_box == ' ':
@@ -123,7 +129,7 @@ class game:
             self.set_content(x+a, y+b, '*')
             self.set_content(x, y, '.')
 
-    def unmove(self):
+    def unmove(self):  # turn back previous move
         if not self.queue.empty():
             movement = self.queue.get()
             if movement[2]:
@@ -134,7 +140,7 @@ class game:
             else:
                 self.move(movement[0] * -1, movement[1] * -1, False)
 
-    def move(self, x, y, save):
+    def move(self, x, y, save):  # go to next move -> put movement into queue and reset the board
         if self.can_move(x, y):
             current = self.worker()
             future = self.next(x, y)
@@ -335,7 +341,7 @@ def transferToGameState(layout):
 def PosOfPlayer(gameState):
     # Return the position of agent
     # e.g. (2, 2)
-    return tuple(np.argwhere((gameState == 2) | (gameState == 5))[0])
+    return tuple(np.argwhere(gameState == 2 | (gameState == 5))[0])
 
 
 def PosOfBoxes(gameState):
@@ -469,7 +475,7 @@ def breadthFirstSearch():
                 actions.append(node_action + [action[-1]])
     end = time.time()
     print('RUNTIME OF BREATHFIRST SEARCH: %.3f second.' % (end - start),
-          'EXPLORED NODE                : %d' % (len(exploredSet)), 
+          'EXPLORED NODE                : %d' % (len(exploredSet)),
           'NUMBER OF STEP               : %d' % (len(res[0])), sep='\n')
     return res
 
